@@ -29,7 +29,7 @@ export python_version_minor
 export python_version_patch
 export PYTHON_VERSION
 
-venv.3.8:## 	venv.3.8
+venv-3-8:## 	venv-3-8
 	@echo PATH=$(PATH):/usr/local/opt/python@3.8/Frameworks/Python.framework/Versions/3.8/bin
 	@echo PATH=$(PATH):$(HOME)/Library/Python/3.8/bin
 	@#rm -rf .venv
@@ -43,14 +43,14 @@ venv.3.8:## 	venv.3.8
 	@echo ". .venv/bin/activate"
 	@echo "or:"
 	@echo "make venv-test"
-venv.3.8-test:## 	
+venv-3-8-test:## 	venv-3-8-test
 	# insert test commands here
 	test -d .venv || $(shell which python3.8) -m virtualenv .venv
 	( \
 	   source .venv/bin/activate; pip install -r requirements.txt; \
 	   $(shell which python3.8) -m pip list --outdated \
 	);
-venv.3.8-install:## 	
+venv-3-8-install:## 	venv-3-8-install
 	@echo "python3 v$(python_version_major).$(python_version_minor).$(python_version_patch)"
 ifneq (python_version_major,3)
 ifneq (python_version_minor,8)

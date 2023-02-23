@@ -29,9 +29,9 @@ export python_version_minor
 export python_version_patch
 export PYTHON_VERSION
 
-venv: venv.3.11## 	default venv.3.11
+venv: venv-3-11## 	default venv-3-11
 	@echo
-venv.3.11:## 	venv.3.11
+venv-3-11:## 	venv-3-11
 	@echo PATH=$(PATH):/usr/local/opt/python@3.11/Frameworks/Python.framework/Versions/3.11/bin
 	@echo PATH=$(PATH):$(HOME)/Library/Python/3.11/bin
 	@#rm -rf .venv
@@ -45,14 +45,14 @@ venv.3.11:## 	venv.3.11
 	@echo ". .venv/bin/activate"
 	@echo "or:"
 	@echo "make venv-test"
-venv.3.11-test:## 	venv.3.11-test
+venv-3-11-test:## 	venv-3-11-test
 	# insert test commands here
 	test -d .venv || $(shell which python3.11) -m virtualenv .venv
 	( \
 	   source .venv/bin/activate; pip install -r requirements.txt; \
 	   $(shell which python3.11) -m pip list --outdated \
 	);
-venv.3.11-install:## 	venv.3.11-install
+venv-3-11-install:## 	venv-3-11-install
 	@echo "python3 v$(python_version_major).$(python_version_minor).$(python_version_patch)"
 ifneq (python_version_major,3)
 ifneq (python_version_minor,11)
