@@ -3,7 +3,7 @@ PWD 									?= pwd_unknown
 TIME 									:= $(shell date +%s)
 export TIME
 
-HOMEBREW                                := $(type -P brew)
+HOMEBREW                                := $(shell type -P brew)
 export HOMEBREW
 
 PYTHON                                  := $(shell which python)
@@ -158,18 +158,17 @@ init:##
 	#@echo PATH=$(PATH):$(HOME)/Library/Python/3.10/bin
 	$(PYTHON3) -m pip install $(USER_FLAG) --upgrade pip
 	$(PYTHON3) -m pip install $(USER_FLAG) -r requirements.txt
-twitter-api:pyjq## 	
+twitter-api:pyjq## 	twitter-api
 	#@echo pip3 install $(USER_FLAG) twint
 	echo pip3 install $(USER_FLAG) TwitterAPI
 	[ -d "$(PWD)/TwitterAPI" ] && pushd $(PWD)/TwitterAPI && $(PYTHON3) setup.py install $(USER_FLAG) || git clone https://github.com/geduldig/TwitterAPI.git && pushd $(PWD)/TwitterAPI && $(PYTHON3) setup.py install $(USER_FLAG)
-pyjq:
-	pip3 install $(USER_FLAG) pyjq
+pyjq:## 	install pyjq AND/OR jq
+	$(PYTHON3) -m pip install $(USER_FLAG)     pyjq || echo "failed to install     pyjq"
+	$(PYTHON3) -m pip install $(USER_FLAG)       jq || echo "failed to install       jq"
+	$(PYTHON3) -m pip install $(USER_FLAG) markdown || echo "failed to install markdown"
 help:## 	verbose help
-	@echo ''
+	@echo verbose $@
 	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/ /'
-	@echo ""
-	@echo "Useful Commands:"
-	@echo ""
 
 
 .PHONY: report
@@ -186,6 +185,8 @@ report:
 	@echo ''
 	@echo 'NODE_VERSION=${NODE_VERSION}	'
 	@echo 'NODE_ALIAS=${NODE_ALIAS}	'
+	@echo ''
+	@echo 'HOMEBREW=${HOMEBREW}'
 	@echo ''
 	@echo 'GIT_USER_NAME=${GIT_USER_NAME}'
 	@echo 'GH_USER_REPO=${GH_USER_REPO}'
@@ -214,28 +215,18 @@ endif
 .PHONY: git-add
 .ONESHELL:
 git-add: remove
-	@echo git-add
-
 	git config advice.addIgnoredFile false
 	#git add *
-	git add                 .github
-	git add                 legit
-	git add                 nostril
-
+	mkdir -p .github
+	git add  .github
 	git add --ignore-errors GNUmakefile
 	git add --ignore-errors README.md
 	git add --ignore-errors sources/*.md
-	git add --ignore-errors sources/*.html
-	git add --ignore-errors TIME
-	git add --ignore-errors GLOBAL
+	#git add --ignore-errors sources/*.html
 	#git add --ignore-errors CNAME
-	git add --ignore-errors touch-block-time.py
 	git add --ignore-errors *.py
-	#git add --ignore-errors sources/*.py
 	git add --ignore-errors index.html
 	git add --ignore-errors .gitignore
-	git add --ignore-errors *.sh
-	git add --ignore-errors *.yml
 
 .PHONY: push
 .ONESHELL:
@@ -302,16 +293,12 @@ automate: touch-time git-add
 .PHONY: docs
 docs: git-add awesome
 	#@echo docs
-	bash -c "if pgrep MacDown; then pkill MacDown; fi"
-	#bash -c "curl https://raw.githubusercontent.com/sindresorhus/awesome/main/readme.md -o ./sources/AWESOME-temp.md"
+	bash -c 'if pgrep MacDown; then pkill MacDown; fi'
 	bash -c 'cat $(PWD)/sources/HEADER.md                >  $(PWD)/README.md'
 	bash -c 'cat $(PWD)/sources/COMMANDS.md              >> $(PWD)/README.md'
 	bash -c 'cat $(PWD)/sources/FOOTER.md                >> $(PWD)/README.md'
-	#$(HOMEBREW) install pandoc
-	bash -c "if hash pandoc 2>/dev/null; then echo; fi || $(HOMEBREW) install pandoc"
-	#bash -c 'pandoc -s README.md -o index.html  --metadata title="$(GH_USER_SPECIAL_REPO)" '
-	bash -c 'pandoc -s README.md -o index.html'
-	#bash -c "if hash open 2>/dev/null; then open README.md; fi || echo failed to open README.md"
+	@if hash pandoc 2>/dev/null; then echo; fi || $(HOMEBREW) install pandoc
+	bash -c 'reload && pandoc -s README.md -o index.html'
 	git add --ignore-errors sources/*.md
 	git add --ignore-errors *.md
 	#git ls-files -co --exclude-standard | grep '\.md/$\' | xargs git
@@ -319,14 +306,8 @@ docs: git-add awesome
 .PHONY: awesome
 awesome:
 	@echo awesome
-
-	bash -c "$(HOMEBREW) install curl gnu-sed pandoc"
-
-    bash -c "curl https://www.bitcoin.com/bitcoin.pdf -o bitcoin.pdf && rm -f bitcoin.pdf"
-
-	bash -c "curl https://raw.githubusercontent.com/sindresorhus/awesome/main/readme.md -o ./sources/AWESOME-temp.md"
-	bash -c "sed '1,136d' ~/randymcmillan/sources/AWESOME-temp.md > ./sources/AWESOME.md"
-	bash -c "pandoc -s ~/randymcmillan/sources/AWESOME.md -o ./sources/awesome.html"
+	$(HOMEBREW) install curl gnu-sed pandoc
+	bash -c "curl https://www.bitcoin.org/bitcoin.pdf -o bitcoin.pdf && rm -f bitcoin.pdf"
 
 .PHONY: remove
 remove:
@@ -398,3 +379,4 @@ success:
 include venv.3.11.mk
 include venv.3.10.mk
 include venv.3.8.mk
+include venv.3.7.mk
