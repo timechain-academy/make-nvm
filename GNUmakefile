@@ -146,31 +146,11 @@ I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 .PHONY: init
 .ONESHELL:
 init:## 	
-	# @echo $(PYTHON)
-	# @echo $(PYTHON2)
-	# @echo $(PYTHON3)
-	# @echo $(PIP)
-	# @echo $(PIP2)
-	# @echo $(PIP3)
-	#@echo PATH=$(PATH):/usr/local/opt/python@3.8/Frameworks/Python.framework/Versions/3.8/bin
-	#@echo PATH=$(PATH):$(HOME)/Library/Python/3.8/bin
-	#@echo PATH=$(PATH):/usr/local/opt/python@3.10/Frameworks/Python.framework/Versions/3.10/bin
-	#@echo PATH=$(PATH):$(HOME)/Library/Python/3.10/bin
 	$(PYTHON3) -m pip install $(USER_FLAG) --upgrade pip
 	$(PYTHON3) -m pip install $(USER_FLAG) -r requirements.txt
-twitter-api:pyjq## 	twitter-api
-	#@echo pip3 install $(USER_FLAG) twint
-	echo pip3 install $(USER_FLAG) TwitterAPI
-	[ -d "$(PWD)/TwitterAPI" ] && pushd $(PWD)/TwitterAPI && $(PYTHON3) setup.py install $(USER_FLAG) || git clone https://github.com/geduldig/TwitterAPI.git && pushd $(PWD)/TwitterAPI && $(PYTHON3) setup.py install $(USER_FLAG)
-pyjq:## 	install pyjq AND/OR jq
-	$(PYTHON3) -m pip install $(USER_FLAG)     pyjq || echo "failed to install     pyjq"
-	$(PYTHON3) -m pip install $(USER_FLAG)       jq || echo "failed to install       jq"
-	$(PYTHON3) -m pip install $(USER_FLAG) markdown || echo "failed to install markdown"
 help:## 	verbose help
 	@echo verbose $@
 	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/ /'
-
-
 .PHONY: report
 report:
 	@echo ''
@@ -212,125 +192,6 @@ ifneq ($(shell id -u),0)
 	sudo -s
 endif
 
-.PHONY: git-add
-.ONESHELL:
-git-add: remove
-	git config advice.addIgnoredFile false
-	#git add *
-	mkdir -p .github
-	git add  .github
-	git add --ignore-errors GNUmakefile
-	git add --ignore-errors README.md
-	git add --ignore-errors sources/*.md
-	#git add --ignore-errors sources/*.html
-	#git add --ignore-errors CNAME
-	git add --ignore-errors *.py
-	git add --ignore-errors index.html
-	git add --ignore-errors .gitignore
-
-.PHONY: push
-.ONESHELL:
-push: remove touch-time touch-block-time git-add
-	@echo push
-	git push --set-upstream origin master || echo
-	bash -c "git commit --allow-empty -m '$(TIME)'"
-	bash -c "git push -f $(GIT_REPO_ORIGIN)	+$(GIT_BRANCH):$(GIT_BRANCH)"
-
-.PHONY: branch
-.ONESHELL:
-branch: remove git-add docs touch-time touch-block-time
-	@echo branch
-
-	git add --ignore-errors GNUmakefile TIME GLOBAL .github *.sh *.yml
-	git add --ignore-errors .github
-	git commit -m 'make branch by $(GIT_USER_NAME) on $(TIME)'
-	git branch $(TIME)
-	git push -f origin $(TIME)
-
-.PHONY: time-branch
-.ONESHELL:
-time-branch: remove git-add docs touch-time touch-block-time
-	@echo time-branch
-	bash -c "git commit -m 'make time-branch by $(GIT_USER_NAME) on time-$(TIME)'"
-		git branch time-$(TIME)
-		git push -f origin time-$(TIME)
-
-.PHONY: trigger
-trigger: remove git-add touch-block-time touch-time touch-global
-
-.PHONY: touch-time
-.ONESHELL:
-touch-time: remove git-add touch-block-time
-	@echo touch-time
-	# echo $(TIME) $(shell git rev-parse HEAD) > TIME
-	echo $(TIME) > TIME
-
-.PHONY: touch-global
-.ONESHELL:
-touch-global: remove git-add touch-block-time
-	@echo touch-global
-	echo $(TIME) $(shell git rev-parse HEAD) > GLOBAL
-
-.PHONY: touch-block-time
-.ONESHELL:
-touch-block-time: remove git-add
-	@echo touch-block-time
-	@echo $(PYTHON3)
-	#$(PYTHON3) ./touch-block-time.py
-	BLOCK_TIME=$(shell  ./touch-block-time.py)
-	export BLOCK_TIME
-	echo $(BLOCK_TIME)
-	git add .gitignore *.md GNUmakefile  *.yml *.sh BLOCK_TIME *.html *.txt TIME
-	git commit --allow-empty -m $(TIME)
-		git branch $(BLOCK_TIME)
-		#git push -f origin $(BLOCK_TIME)
-
-.PHONY: automate
-automate: touch-time git-add
-	@echo automate
-	./.github/workflows/automate.sh
-
-.PHONY: docs
-docs: git-add awesome
-	#@echo docs
-	bash -c 'if pgrep MacDown; then pkill MacDown; fi'
-	bash -c 'cat $(PWD)/sources/HEADER.md                >  $(PWD)/README.md'
-	bash -c 'cat $(PWD)/sources/COMMANDS.md              >> $(PWD)/README.md'
-	bash -c 'cat $(PWD)/sources/FOOTER.md                >> $(PWD)/README.md'
-	@if hash pandoc 2>/dev/null; then echo; fi || $(HOMEBREW) install pandoc
-	bash -c 'reload && pandoc -s README.md -o index.html'
-	git add --ignore-errors sources/*.md
-	git add --ignore-errors *.md
-	#git ls-files -co --exclude-standard | grep '\.md/$\' | xargs git
-
-.PHONY: awesome
-awesome:
-	@echo awesome
-	$(HOMEBREW) install curl gnu-sed pandoc
-	bash -c "curl https://www.bitcoin.org/bitcoin.pdf -o bitcoin.pdf && rm -f bitcoin.pdf"
-
-.PHONY: remove
-remove:
-#	rm -rf dotfiles
-#	rm -rf legit
-
-#.PHONY: bitcoin-test-battery
-#bitcoin-test-battery:
-#	./bitcoin-test-battery.sh v22.0rc3
-
-.PHONY: dotfiles
-dotfiles:
-	@echo dotfiles
-	@if [ -d ~/dotfiles ]; then pushd ~/dotfiles && make vim && popd && exit; else git clone https://github.com/randymcmillan/dotfiles ~/dotfiles; fi
-	@pushd ~/dotfiles && make vim && popd
-
-.PHONY: bitcoin-test-battery
-.ONESHELL:
-bitcoin-test-battery:
-
-	if [ -f $(TIME)/README.md ]; then pushd $(TIME) && ./autogen.sh && ./configure && make && popd ; else git clone -b master --depth 3 https://github.com/bitcoin/bitcoin $(TIME) && \
-		pushd $(TIME) && ./autogen.sh && ./configure --disable-wallet --disable-bench --disable-tests && make deploy; fi
-
 checkbrew:## 	checkbrew
 ifeq ($(HOMEBREW),)
 	@/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -341,14 +202,6 @@ endif
 submodules:checkbrew## 	submodules
 	@git submodule update --init --recursive
 #	@git submodule foreach --recursive "git submodule update --init --recursive"
-
-.PHONY: legit
-.ONESHELL:
-legit:## 	legit
-	if [ ! -f "legit/README.md" ]; then make submodules; fi
-	if [ -d "legit" ]; then pushd legit && make legit; popd; fi
-legit-install:## 	legit-install
-	if [ -d "legit" ]; then pushd legit && make cargo-install; popd; fi
 
 .PHONY: nvm
 .ONESHELL:
