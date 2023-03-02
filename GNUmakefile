@@ -149,8 +149,13 @@ init:##
 	$(PYTHON3) -m pip install $(USER_FLAG) --upgrade pip
 	$(PYTHON3) -m pip install $(USER_FLAG) -r requirements.txt
 help:## 	verbose help
+	@echo "### make-nvm"
+	@echo "---"
 	@echo verbose $@
 	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/ /'
+readme:## 	make help > README.md & python3 docs.py
+	@$(MAKE) help > README.md
+	@python3 docs.py
 .PHONY: report
 report:
 	@echo ''
