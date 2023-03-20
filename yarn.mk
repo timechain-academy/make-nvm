@@ -4,17 +4,19 @@ install:## 	$(PACKAGE_MANAGER) install
 ##     PACKAGE_MANAGER=npm MAN_COMMAND=install make report
 ##     PACKAGE_MANAGER=npm MAN_COMMAND=install make install
 	@$(PACKAGE_MANAGER) install
-run-build:## 	yarn run build
-	@$(PACKAGE_MANAGER) run build
-run-dev:## 	yarn run dev
-	@$(PACKAGE_MANAGER) run dev
-run-lint:## 	yarn run lint
+lint:## 	eslint --ext .ts,.tsx .
 	@$(PACKAGE_MANAGER) run lint
-run-lint-fix:## 	yarn run lint:fix 
-	@$(PACKAGE_MANAGER) run lint:fix
-run-postinstall:## 	yarn run postinstall
-	@$(PACKAGE_MANAGER) run postinstall
-run-preinstall:## 	yarn run preinstall
-	@$(PACKAGE_MANAGER) run preinstall
+make:## 	electron-forge make
+	@$(PACKAGE_MANAGER) run make
+package:## 	electron-forge package
+	@$(PACKAGE_MANAGER) run package
+publish:## 	electron-forge publish
+	@$(PACKAGE_MANAGER) run publish
+start:## 	electron-forge start
+	@$(PACKAGE_MANAGER) run start
+electron-forge-cli:## 	yarn add --dev @electron-forge/cli
+	@yarn add --dev @electron-forge/cli
+electron-forge-import:## 	yarn electron-forge import
+	@yarn electron-forge import
 # vim: set noexpandtab:
 # vim: set setfiletype make

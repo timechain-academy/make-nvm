@@ -5,6 +5,8 @@ export TIME
 
 HOMEBREW                                := $(shell type -P brew)
 export HOMEBREW
+HOMEBREW                                := $(shell type -P nvm)
+export NVM
 
 PYTHON                                  := $(shell which python)
 export PYTHON
@@ -168,10 +170,11 @@ report:
 	@echo 'PYTHON_VENV=${PYTHON_VENV}'
 	@echo 'PYTHON3_VENV=${PYTHON3_VENV}'
 	@echo ''
+	@echo 'HOMEBREW=${HOMEBREW}'
+	@echo 'NVM=${NVM}'
+	@echo ''
 	@echo 'NODE_VERSION=${NODE_VERSION}	'
 	@echo 'NODE_ALIAS=${NODE_ALIAS}	'
-	@echo ''
-	@echo 'HOMEBREW=${HOMEBREW}'
 	@echo ''
 	@echo 'GIT_USER_NAME=${GIT_USER_NAME}'
 	@echo 'GH_USER_REPO=${GH_USER_REPO}'
@@ -199,9 +202,12 @@ endif
 
 checkbrew:## 	checkbrew
 ifeq ($(HOMEBREW),)
-	@/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+ifeq ($(NVM),)
+	type -P brew && brew install nvm
+endif
 else
-	@type -P brew
+	type -P brew && brew install nvm
 endif
 
 submodules:checkbrew## 	submodules
