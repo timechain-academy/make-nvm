@@ -147,7 +147,8 @@ I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 
 .PHONY: init
 .ONESHELL:
-init:## 	
+init:## 	some initial setup
+	touch requirements.txt
 	$(PYTHON3) -m pip install $(USER_FLAG) --upgrade pip
 	$(PYTHON3) -m pip install $(USER_FLAG) -r requirements.txt
 help:## 	verbose help
