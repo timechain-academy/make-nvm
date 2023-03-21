@@ -259,10 +259,10 @@ electron-forge-make:## 	electron-forge make
 	@rm -rf out/make-nvm-darwin-x64
 	@$(PACKAGE_MANAGER) run make
 package:electron-forge-package## 	electron-forge-package
-electron-forge-package:## 	electron-forge package
+electron-forge-package:license version## 	electron-forge package
 	@$(PACKAGE_MANAGER) run package
 publish:electron-forge-publish## 	electron-forge-publish
-electron-forge-publish:## 	electron-forge publish
+electron-forge-publish:license version## 	electron-forge publish
 	@$(PACKAGE_MANAGER) run publish
 start:electron-forge-start## 	electron-forge-start
 electron-forge-start:## 	electron-forge start
