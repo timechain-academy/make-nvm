@@ -279,10 +279,9 @@ electron-app-wp-ts:## 	template-webpack-typescript
 	@rm -rf ./src/$(GIT_BRANCH)-wp-ts
 	@yarn create electron-app ./src/$(GIT_BRANCH)-wp-ts --template=webpack-typescript
 recursive:
-	rm -rdf ./src/**-wp/out
-	rm -rdf ./src/**-wp-ts/out
+	rm -rdf ./src/**-wp**/out
 	rm -rdf ./forge.config.js || echo
-	rm -rdf ./out/make-nvm-* || echo
+	rm -rdf ./out/make-nvm-** || echo
 	$(MAKE) make
 	$(MAKE) package
 	git checkout forge.config.js
