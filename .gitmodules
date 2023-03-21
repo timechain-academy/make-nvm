@@ -1,0 +1,4 @@
+[submodule "src/nodegit"]
+	path = src/nodegit
+  url = git@github.com:nodegit/nodegit.git
+  branch = 6ce1ebfe07f4f59b6aebacc127eff1b7cc9a7424
