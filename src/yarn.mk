@@ -27,9 +27,11 @@ electron-forge-import:## 	yarn electron-forge import
 	@yarn electron-forge import
 app-wp:electron-app-wp## 	electron-app-wp
 electron-app-wp:## 	template-webpack
+	@rm -rf ./src/$(GIT_BRANCH)-wp
 	@yarn create electron-app ./src/$(GIT_BRANCH)-wp --template=webpack
 app-wp-ts:electron-app-wp-ts## 	electron-app-wp-ts
 electron-app-wp-ts:## 	template-webpack-typescript
+	@rm -rf ./src/$(GIT_BRANCH)-wp-ts
 	@yarn create electron-app ./src/$(GIT_BRANCH)-wp-ts --template=webpack-typescript
 # vim: set noexpandtab:
 # vim: set setfiletype make
