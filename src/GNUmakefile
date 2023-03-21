@@ -241,14 +241,17 @@ failure:
 success:
 	@-/usr/bin/true && ([ $$? -eq 0 ] && echo "success!") || echo "failure!"
 
-install:## 	$(PACKAGE_MANAGER) install
+install:license version## 	$(PACKAGE_MANAGER) install
 ## install:	We use yarn by default
 ## Try:
 ##     PACKAGE_MANAGER=npm MAN_COMMAND=install make report
 ##     PACKAGE_MANAGER=npm MAN_COMMAND=install make install
-	@yarn licenses generate-disclaimer > ./src/LICENSE
-	@npm pkg get version | xargs echo > ./src/version
 	@$(PACKAGE_MANAGER) install
+.PHONY: license version
+license:
+	@yarn licenses generate-disclaimer > ./src/LICENSE
+version:
+	@npm pkg get version | xargs echo > ./src/version
 lint:## 	eslint --ext .ts,.tsx .
 	@$(PACKAGE_MANAGER) run lint
 make:electron-forge-make## 	electron-forge-make
