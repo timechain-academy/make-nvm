@@ -6,13 +6,13 @@ install:## 	$(PACKAGE_MANAGER) install
 	@$(PACKAGE_MANAGER) install
 lint:## 	eslint --ext .ts,.tsx .
 	@$(PACKAGE_MANAGER) run lint
-make:## 	electron-forge make
+electron-forge-make:## 	electron-forge make
 	@$(PACKAGE_MANAGER) run make
-package:## 	electron-forge package
+electron-forge-package:## 	electron-forge package
 	@$(PACKAGE_MANAGER) run package
-publish:## 	electron-forge publish
+electron-forge-publish:## 	electron-forge publish
 	@$(PACKAGE_MANAGER) run publish
-start:## 	electron-forge start
+electron-forge-start:## 	electron-forge start
 	@$(PACKAGE_MANAGER) run start
 electron-forge-cli:## 	yarn add --dev @electron-forge/cli
 	@yarn add --dev @electron-forge/cli
