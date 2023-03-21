@@ -3,6 +3,8 @@ install:## 	$(PACKAGE_MANAGER) install
 ## Try:
 ##     PACKAGE_MANAGER=npm MAN_COMMAND=install make report
 ##     PACKAGE_MANAGER=npm MAN_COMMAND=install make install
+	@yarn licenses generate-disclaimer > ./src/LICENSE
+	@npm pkg get version | xargs echo > ./src/version
 	@$(PACKAGE_MANAGER) install
 lint:## 	eslint --ext .ts,.tsx .
 	@$(PACKAGE_MANAGER) run lint
