@@ -30,18 +30,25 @@ electron-forge-import:## 	yarn electron-forge import
 	@yarn electron-forge import
 app-wp:electron-app-wp## 	electron-app-wp
 electron-app-wp:## 	template-webpack
-	@rm -rf ./src/$(GIT_BRANCH)-wp
+	@rm -rf ./src/$(GIT_BRANCH)-wp || echo
 	@yarn create electron-app ./src/$(GIT_BRANCH)-wp --template=webpack
 app-wp-ts:electron-app-wp-ts## 	electron-app-wp-ts
 electron-app-wp-ts:## 	template-webpack-typescript
-	@rm -rf ./src/$(GIT_BRANCH)-wp-ts
+	@rm -rf ./src/$(GIT_BRANCH)-wp-ts || echo
 	@yarn create electron-app ./src/$(GIT_BRANCH)-wp-ts --template=webpack-typescript
-recursive:
-	rm forge.config.js
-	$(MAKE) make
+recursive:clean-out
+#NOTES: we remove forge.config.js
+# to allow ./webpack to update
+# correctly from ./src.
+# WE then re-add the
+# file to the repo to trick
+# electron-forge to include
+# the entire repo into the
+# app bundle.
+	#$(MAKE) make
 	$(MAKE) package
 	git checkout forge.config.js
-	$(MAKE) make
+	#$(MAKE) make
 	$(MAKE) package
 
 # vim: set noexpandtab:
