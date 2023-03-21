@@ -281,14 +281,20 @@ app-wp-ts:electron-app-wp-ts## 	electron-app-wp-ts
 electron-app-wp-ts:## 	template-webpack-typescript
 	@rm -rf ./src/$(GIT_BRANCH)-wp-ts
 	@yarn create electron-app ./src/$(GIT_BRANCH)-wp-ts --template=webpack-typescript
-recursive:
+recursive-all:recursive-zip recursive-app
+recursive-zip:license version
 	rm -rdf ./src/**-wp**/out
 	rm -rdf ./forge.config.js || echo
 	rm -rdf ./out/make-nvm-** || echo
 	$(MAKE) make
-	$(MAKE) package
 	git checkout forge.config.js
 	$(MAKE) make
+recursive-app:license version
+	rm -rdf ./src/**-wp**/out
+	rm -rdf ./forge.config.js || echo
+	rm -rdf ./out/make-nvm-** || echo
+	$(MAKE) package
+	git checkout forge.config.js
 	$(MAKE) package
 #node-gyp versions require different python3 versions
 -include venv.3.11.mk
