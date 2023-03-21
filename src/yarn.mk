@@ -1,3 +1,6 @@
+clean-out:
+	@rm -rf ./out/make-nvm** || echo
+	@rm ./forge.config.js || echo
 install:## 	$(PACKAGE_MANAGER) install
 ## install:	We use yarn by default
 ## Try:
