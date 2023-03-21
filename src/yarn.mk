@@ -33,5 +33,13 @@ app-wp-ts:electron-app-wp-ts## 	electron-app-wp-ts
 electron-app-wp-ts:## 	template-webpack-typescript
 	@rm -rf ./src/$(GIT_BRANCH)-wp-ts
 	@yarn create electron-app ./src/$(GIT_BRANCH)-wp-ts --template=webpack-typescript
+recursive:
+	rm forge.config.js
+	$(MAKE) make
+	$(MAKE) package
+	git checkout forge.config.js
+	$(MAKE) make
+	$(MAKE) package
+
 # vim: set noexpandtab:
 # vim: set setfiletype make
