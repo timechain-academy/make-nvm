@@ -4,3 +4,9 @@
   branch = 6ce1ebfe07f4f59b6aebacc127eff1b7cc9a7424
   shallow = true
   ignore = dirty
+[submodule "src/nostr"]
+	path = src/nostr
+	url = git@github.com:RandyMcMillan/nostr-js.git
+  branch = v0.2.7.1
+  shallow = true
+  ignore = dirty
