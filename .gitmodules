@@ -7,6 +7,6 @@
 [submodule "src/nostr"]
 	path = src/nostr
 	url = git@github.com:RandyMcMillan/nostr-js.git
-  branch = v0.2.7.1
+  branch = fed4c16e92f5262b0de59befd59d1e4ee9334483
   shallow = true
   ignore = dirty
