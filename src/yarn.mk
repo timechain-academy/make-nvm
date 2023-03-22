@@ -16,7 +16,7 @@ electron-forge-package:## 	electron-forge package
 publish:electron-forge-publish## 	electron-forge-publish
 electron-forge-publish:## 	electron-forge publish
 	@$(PACKAGE_MANAGER) run publish
-start:electron-forge-publish## 	electron-forge-start
+start:electron-forge-start## 	electron-forge-start
 electron-forge-start:## 	electron-forge start
 	@$(PACKAGE_MANAGER) run start
 cli:electron-forge-cli## 	electron-forge-cli
