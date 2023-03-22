@@ -39,6 +39,9 @@
     "typescript": "~4.5.4"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "@types/node": "*",
+    "electron-squirrel-startup": "^1.0.0",
+    "nostr": "./src/nostr",
+    "webpack": "^5.11.0"
   }
 }
